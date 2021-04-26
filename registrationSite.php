@@ -1,4 +1,7 @@
-<!DOCTYPE HTML>
+<?php
+	session_start();
+?>
+
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
@@ -29,6 +32,13 @@
 			</div>
 			<div class="row " name="userName">
 				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName">
+				<?php
+					if(isset($_SESSION['error_login']))
+					{
+						echo '<span>'.$_SESSION['error_login'].'</span>';
+						unset($_SESSION['error_login']);
+					}
+				?>
 			</div>
 			<div class="row rowMargin">
 				Last name:
@@ -64,7 +74,7 @@
 					</a>
 				</div>
 				<div class="col-sm ">
-					<a class="btn buttonsStyle" role="submit">Submit</a>
+					<input type="submit" class="btn buttonsStyle" value="Submit"</a>
 				</div>
 			</div>
 		</form>

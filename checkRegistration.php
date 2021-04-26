@@ -1,6 +1,29 @@
 <?php
 	
+	session_start();
+	$registrationOK=true;
+	$napis = $_POST['userName'];
+	echo $napis;
+	
+	//check login
+	if(isset($_POST['userName']))
+	{
+		echo "GIT";
+	}
+	else
+	{
+		$_SESSION['error_login']="Login field is empty";
+		//header('Location: registrationSite.php');
+		//exit();
+	}
+	
+	//check passwords
+	
+	//check email
+	
 ?>
+
+
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
