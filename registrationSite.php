@@ -22,36 +22,40 @@
 		<h1 > Cash Assistant </h1>
 	</header>
 	<div class="container bg-container">
-		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
+		<form class="mainPanel col-sm-8 col-md-6 p-4 mt-4"
+			action="checkRegistration.php" method="post">
 			<div class="row ">
 				Name:
 			</div>
-			<div class="row ">
+			<div class="row " name="userName">
 				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName">
 			</div>
 			<div class="row rowMargin">
 				Last name:
 			</div>
-			<div class="row ">
+			<div class="row " name="userLastName">
 				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName">
 			</div>
 			<div class="row rowMargin">
 				E-mail address:
 			</div>
-			<div class="row ">
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserMail">
+			<div class="row " name="userEmail">
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail">
 			</div>
 			<div class="row rowMargin">
 				Login:
 			</div>
-			<div class="row ">
+			<div class="row" name="userLogin">
 				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin">
 			</div>
 			<div class="row rowMargin">
 				Password
 			</div>
-			<div class="row ">
+			<div class="row" name="userPassword1">
 				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP">
+			</div>
+			<div class="row mt-2" name="userPassword2">
+				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP">
 			</div>
 			<div class="row mt-5">
 				<div class="col-sm ">
@@ -60,11 +64,10 @@
 					</a>
 				</div>
 				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="index.html" role="button">Submit</a>
+					<a class="btn buttonsStyle" role="submit">Submit</a>
 				</div>
 			</div>
-			
-		</div>
+		</form>
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
