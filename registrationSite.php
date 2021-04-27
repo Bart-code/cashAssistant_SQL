@@ -30,12 +30,12 @@
 			<div class="row ">
 				Name:
 			</div>
-			<div class="row " name="userName">
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName">
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="userName"/>
 				<?php
 					if(isset($_SESSION['error_login']))
 					{
-						echo '<span>'.$_SESSION['error_login'].'</span>';
+						echo '<span class="error">'.$_SESSION['error_login'].'</span>';
 						unset($_SESSION['error_login']);
 					}
 				?>
@@ -43,29 +43,29 @@
 			<div class="row rowMargin">
 				Last name:
 			</div>
-			<div class="row " name="userLastName">
-				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName">
+			<div class="row " >
+				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName" name="userLastName" />
 			</div>
 			<div class="row rowMargin">
 				E-mail address:
 			</div>
-			<div class="row " name="userEmail">
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail">
+			<div class="row " >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="userEmail"/>
 			</div>
 			<div class="row rowMargin">
 				Login:
 			</div>
-			<div class="row" name="userLogin">
-				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin">
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="userLogin"/>
 			</div>
 			<div class="row rowMargin">
 				Password
 			</div>
-			<div class="row" name="userPassword1">
-				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP">
+			<div class="row" >
+				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="userPassword1"/>
 			</div>
-			<div class="row mt-2" name="userPassword2">
-				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP">
+			<div class="row mt-2">
+				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="userPassword2"/>
 			</div>
 			<div class="row mt-5">
 				<div class="col-sm ">

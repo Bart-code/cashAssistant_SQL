@@ -91,3 +91,9 @@ h2
 		margin-bottom: 5px;
 	}
 }
+
+.error
+{
+	color: #e22;
+	font: 14px;
+}

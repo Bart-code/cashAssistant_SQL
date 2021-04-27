@@ -1,25 +1,33 @@
 <?php
-	
 	session_start();
 	$registrationOK=true;
-	$napis = $_POST['userName'];
-	echo $napis;
+	$userLogin=$_POST['userName'];
 	
 	//check login
 	if(isset($_POST['userName']))
 	{
-		echo "GIT";
+		if(strlen($userLogin) <6 || strlen($userLogin) >20)
+		{
+			$_SESSION['error_login']="User-name must be (6-20)";
+			$registrationOK=false;
+		}
 	}
 	else
 	{
-		$_SESSION['error_login']="Login field is empty";
-		//header('Location: registrationSite.php');
-		//exit();
+		$_SESSION['error_login']="User-name field is empty";
+		$registrationOK=false;
+	}
+	
+	if(!$registrationOK)
+	{
+		header('Location: registrationSite.php');
+		exit();
 	}
 	
 	//check passwords
 	
 	//check email
+	
 	
 ?>
 
@@ -48,10 +56,17 @@
 	</header>
 	<div class="container bg-container">
 		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
-			<div class="row ">
-				Login:
+			<div> 
+				Registration succesfull !
+			</div>
+			<div class="col-sm mt-4">
+				<a class="btn buttonsStyle" href="index.php" role="button">
+					Continue
+				</a>
 			</div>
 		</div>
+		
+		
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

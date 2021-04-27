@@ -37,7 +37,7 @@
 			</div>
 			<div class="row rowMargin">
 				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="registrationSite.html" role="button">Registration</a>
+					<a class="btn buttonsStyle" href="registrationSite.php" role="button">Registration</a>
 				</div>
 				<div class="col-sm ">
 					<a class="btn buttonsStyle" href="mainSite.html" role="button">Login</a>
