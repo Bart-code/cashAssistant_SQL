@@ -1,7 +1,6 @@
 <?php
-
-	$host = "localhost/Aplikacja";
+	$host = "localhost";
 	$db_user = "root";
 	$db_password = "";
-	$db_name = "cashAssistantDataBase";
+	$db_name = "osadnicy";//"cashassistantdatabase";
 ?>

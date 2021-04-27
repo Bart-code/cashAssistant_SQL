@@ -1,32 +1,48 @@
 <?php
 	session_start();
-	$registrationOK=true;
-	$userLogin=$_POST['userName'];
 	
-	//check login
-	if(isset($_POST['userName']))
+	require_once "connect.php";
+	
+	$dataBaseConnect = new mysqli($host, $db_user, $db_password, $db_name);
+	if($dataBaseConnect->connect_errno !=0)
 	{
-		if(strlen($userLogin) <6 || strlen($userLogin) >20)
-		{
-			$_SESSION['error_login']="User-name must be (6-20)";
-			$registrationOK=false;
-		}
+		$_SESSION['dbError']=$dataBaseConnect->connect_errno;
 	}
 	else
 	{
-		$_SESSION['error_login']="User-name field is empty";
-		$registrationOK=false;
+		$registrationOK=true;
+		$userLogin=$_POST['userName'];
+		
+		//check login
+		if(isset($_POST['userName']))
+		{
+			if(strlen($userLogin) <6 || strlen($userLogin) >20)
+			{
+				$_SESSION['error_login']="User-name must be (6-20)";
+				$registrationOK=false;
+			}
+		}
+		else
+		{
+			$_SESSION['error_login']="User-name field is empty";
+			$registrationOK=false;
+		}
+		
+		if(!$registrationOK)
+		{
+			header('Location: registrationSite.php');
+			exit();
+		}
+		
+		//check passwords
+		
+		//check email
+		
+		
+		
+		
+		$dataBaseConnect->close();
 	}
-	
-	if(!$registrationOK)
-	{
-		header('Location: registrationSite.php');
-		exit();
-	}
-	
-	//check passwords
-	
-	//check email
 	
 	
 ?>
@@ -57,7 +73,19 @@
 	<div class="container bg-container">
 		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
 			<div> 
-				Registration succesfull !
+				
+				<?php
+					if(isset($_SESSION['dbError']))
+					{
+						echo "Registration failed...! </br> 
+							Error desc: ".$_SESSION['dbError'];
+					}
+					else
+					{
+						echo "Registration succesfull !";
+					}
+				?>
+				
 			</div>
 			<div class="col-sm mt-4">
 				<a class="btn buttonsStyle" href="index.php" role="button">

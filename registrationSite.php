@@ -35,7 +35,7 @@
 				<?php
 					if(isset($_SESSION['error_login']))
 					{
-						echo '<span class="error">'.$_SESSION['error_login'].'</span>';
+						echo '<span class="errorStyle">'.$_SESSION['error_login'].'</span>';
 						unset($_SESSION['error_login']);
 					}
 				?>

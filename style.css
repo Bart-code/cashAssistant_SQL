@@ -83,6 +83,12 @@ h2
 	min-height: 180px;
 }
 
+.errorStyle
+{
+	color: #e22;
+	font: 14px;
+}
+
 @media(max-width: 575px)
 {
 	.buttonsStyle
@@ -92,8 +98,3 @@ h2
 	}
 }
 
-.error
-{
-	color: #e22;
-	font: 14px;
-}
