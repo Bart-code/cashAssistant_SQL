@@ -4,10 +4,6 @@
 	require_once "connect.php";
 	$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
 	
-	
-
-	echo $wiersz['name'];
-	
 	if($dataBaseConnect->connect_errno!=0)
 	{
 		$_SESSION['dbError']=$dataBaseConnect->connect_errno;
@@ -25,27 +21,34 @@
 		
 		
 		//check name
-		if(strlen($userLogin) <6 || strlen($userLogin) >20)
+		if(strlen($userName) <6 || strlen($userName) >20)
 		{
 			$_SESSION['error_name']="User-name must be (6-20)";
 			$registrationOK=false;
 		}
 		
 		//check last name
+		if(strlen($userLastName) <6 || strlen($userLastName) >20)
+		{
+			$_SESSION['error_lastname']="User-lastname must be (6-20)";
+			$registrationOK=false;
+		}
 		
 		//check email
 		//check login
+		
 		$zapytanie="SELECT id FROM users WHERE username=''";
-		if(strlen($userLogin) <6 || strlen($userLogin) >20)
+		/*if(strlen($userLogin) <6 || strlen($userLogin) >20)
 		{
 			$_SESSION['error_login']="User-name must be (6-20)";
 			$registrationOK=false;
 		}
-		else if
+		else
 		{
 			$_SESSION['error_login']="User-name field is empty";
 			$registrationOK=false;
 		}
+		*/
 		//check passwords
 		
 		if(!$registrationOK)

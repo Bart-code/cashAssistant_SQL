@@ -33,18 +33,25 @@
 			<div class="row" >
 				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="userName"/>
 				<?php
-					if(isset($_SESSION['error_login']))
+					if(isset($_SESSION['error_name']))
 					{
-						echo '<span class="errorStyle">'.$_SESSION['error_login'].'</span>';
-						unset($_SESSION['error_login']);
+						echo '<span class="errorStyle mb-0">'.$_SESSION['error_name'].'</span>';
+						unset($_SESSION['error_name']);
 					}
 				?>
 			</div>
 			<div class="row rowMargin">
 				Last name:
 			</div>
-			<div class="row " >
+			<div class="row" >
 				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName" name="userLastName" />
+				<?php
+					if(isset($_SESSION['error_lastname']))
+					{
+						echo '<span class="errorStyle mb-1">'.$_SESSION['error_lastname'].'</span>';
+						unset($_SESSION['error_lastname']);
+					}
+				?>
 			</div>
 			<div class="row rowMargin">
 				E-mail address:
