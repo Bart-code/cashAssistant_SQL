@@ -1,51 +1,61 @@
 <?php
+	
 	session_start();
-	
 	require_once "connect.php";
+	$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
 	
-	$dataBaseConnect = new mysqli($host, $db_user, $db_password, $db_name);
-	if($dataBaseConnect->connect_errno !=0)
+	
+
+	echo $wiersz['name'];
+	
+	if($dataBaseConnect->connect_errno!=0)
 	{
 		$_SESSION['dbError']=$dataBaseConnect->connect_errno;
 	}
 	else
 	{
+
 		$registrationOK=true;
-		$userLogin=$_POST['userName'];
+		$userName=$_POST['userName'];
+		$userLastName=$_POST['userLastName'];
+		$userLogin=$_POST['userLogin'];
+		$userEmail=$_POST['userEmail'];
+		$userPassword1=$_POST['userPassword1'];
+		$userPassword2=$_POST['userPassword2'];
 		
-		//check login
-		if(isset($_POST['userName']))
+		
+		//check name
+		if(strlen($userLogin) <6 || strlen($userLogin) >20)
 		{
-			if(strlen($userLogin) <6 || strlen($userLogin) >20)
-			{
-				$_SESSION['error_login']="User-name must be (6-20)";
-				$registrationOK=false;
-			}
+			$_SESSION['error_name']="User-name must be (6-20)";
+			$registrationOK=false;
 		}
-		else
+		
+		//check last name
+		
+		//check email
+		//check login
+		$zapytanie="SELECT id FROM users WHERE username=''";
+		if(strlen($userLogin) <6 || strlen($userLogin) >20)
+		{
+			$_SESSION['error_login']="User-name must be (6-20)";
+			$registrationOK=false;
+		}
+		else if
 		{
 			$_SESSION['error_login']="User-name field is empty";
 			$registrationOK=false;
 		}
+		//check passwords
 		
 		if(!$registrationOK)
 		{
 			header('Location: registrationSite.php');
 			exit();
 		}
-		
-		//check passwords
-		
-		//check email
-		
-		
-		
-		
-		$dataBaseConnect->close();
 	}
-	
-	
-?>
+	$dataBaseConnect->close();
+?> 
 
 
 <html lang="pl">
@@ -56,13 +66,10 @@
 	<meta name="description" content="Zapanuj nad finansami" />
 	<meta name="keywords" content="finanse, pieniądze, budżet" />
 	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-	
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" href="style.css" />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
-	
 </head>
 
 <body>
@@ -72,20 +79,18 @@
 	</header>
 	<div class="container bg-container">
 		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
-			<div> 
-				
+			<div> 	
 				<?php
 					if(isset($_SESSION['dbError']))
 					{
 						echo "Registration failed...! </br> 
-							Error desc: ".$_SESSION['dbError'];
+							Error code: ".$_SESSION['dbError'];
 					}
 					else
 					{
 						echo "Registration succesfull !";
 					}
 				?>
-				
 			</div>
 			<div class="col-sm mt-4">
 				<a class="btn buttonsStyle" href="index.php" role="button">
