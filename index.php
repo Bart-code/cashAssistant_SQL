@@ -1,4 +1,7 @@
-<!DOCTYPE HTML>
+<?php
+	session_start();
+?>
+
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
@@ -22,28 +25,51 @@
 		<h2 > Make life easier </h2>
 	</header>
 	<div class="container bg-container">
-		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
-			<div class="row ">
-				Login:
-			</div>
-			<div class="row ">
-				<input type="text" class="form-control" placeholder="User - login" aria-label="Username">
-			</div>
-			<div class="row rowMargin">
-				Password
-			</div>
-			<div class="row ">
-				<input type="password" class="form-control" placeholder="User - password" aria-label="Username">
-			</div>
-			<div class="row rowMargin">
-				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="registrationSite.php" role="button">Registration</a>
+		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4" >
+			<form action="checkLogin.php" method="post">
+				<div class="row ">
+					Login:
 				</div>
-				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="mainSite.html" role="button">Login</a>
+				<div class="row ">
+					<input type="text" name="userLogin" class="form-control" placeholder="User - login" aria-label="Username"
+					<?php
+					if(isset($_SESSION['remember_login']))
+					{
+						echo "value='".$_SESSION['remember_login']."'";
+						unset ($_SESSION['remember_login']);
+					}
+					echo "/>"
+					?>
+					<?php
+						if(isset($_SESSION['error_login']))
+						{
+							echo '<span class="errorStyle mb-0">'.$_SESSION['error_login'].'</span>';
+							unset($_SESSION['error_login']);
+						}
+					?>
 				</div>
-			</div>
-			
+				<div class="row rowMargin">
+					Password
+				</div>
+				<div class="row ">
+					<input type="text" name="userPassword" class="form-control" placeholder="User - password" aria-label="Username">
+					<?php
+						if(isset($_SESSION['error_password']))
+						{
+							echo '<span class="errorStyle mb-0">'.$_SESSION['error_password'].'</span>';
+							unset($_SESSION['error_password']);
+						}
+					?>
+				</div>
+				<div class="row rowMargin">
+					<div class="col-sm ">
+						<a class="btn buttonsStyle" href="registrationSite.php" role="button">Registration</a>
+					</div>
+					<div class="col-sm ">
+						<input type="submit" class="btn buttonsStyle" value="Login"/>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 	

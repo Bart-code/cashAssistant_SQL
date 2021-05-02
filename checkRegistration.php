@@ -43,19 +43,22 @@
 		
 		//check login
 		
-		$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
-		$result = $dataBaseConnect->query($sqlRequest);
-		$usersCount = $result->num_rows;
-		if(  $usersCount > 0)
-		{
-			$_SESSION['error_login']="This login already exist";
-			$registrationOK=false;
-		}
-		
 		if(strlen($userLogin) <6 || strlen($userLogin) >20)
 		{
 			$_SESSION['error_login']="Login must be (6-20)";
 			$registrationOK=false;
+		}
+		else
+		{
+			$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
+			$result = $dataBaseConnect->query($sqlRequest);
+			$usersCount = $result->num_rows;
+			$result->free_result();
+			if(  $usersCount > 0)
+			{
+				$_SESSION['error_login']="This login already exist";
+				$registrationOK=false;
+			}
 		}
 	
 		//check passwords
