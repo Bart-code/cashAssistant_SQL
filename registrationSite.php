@@ -31,7 +31,15 @@
 				Name:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="userName"/>
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="userName"
+				<?php
+				if(isset($_SESSION['remember_name']))
+				{
+					echo "value='".$_SESSION['remember_name']."'";
+					unset ($_SESSION['remember_name']);
+				}
+				echo "/>"
+				?>
 				<?php
 					if(isset($_SESSION['error_name']))
 					{
@@ -44,7 +52,15 @@
 				Last name:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName" name="userLastName" />
+				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName" name="userLastName"
+				<?php
+				if(isset($_SESSION['remember_lastName']))
+				{
+					echo "value='".$_SESSION['remember_lastName']."'";
+					unset ($_SESSION['remember_lastName']);
+				}
+				echo "/>"
+				?>
 				<?php
 					if(isset($_SESSION['error_lastname']))
 					{
@@ -57,7 +73,15 @@
 				E-mail address:
 			</div>
 			<div class="row " >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="userEmail"/>
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="userEmail"
+				<?php
+				if(isset($_SESSION['remember_email']))
+				{
+					echo "value='".$_SESSION['remember_email']."'";
+					unset ($_SESSION['remember_email']);
+				}
+				echo "/>"
+				?>
 				<?php
 					if(isset($_SESSION['error_email']))
 					{
@@ -70,7 +94,15 @@
 				Login:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="userLogin"/>
+				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="userLogin"
+				<?php
+				if(isset($_SESSION['remember_login']))
+				{
+					echo "value='".$_SESSION['remember_login']."'";
+					unset ($_SESSION['remember_login']);
+				}
+				echo "/>"
+				?>
 				<?php
 					if(isset($_SESSION['error_login']))
 					{
@@ -83,7 +115,7 @@
 				Password
 			</div>
 			<div class="row" >
-				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="userPassword1"/>
+				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="userPassword1" />
 			</div>
 			<div class="row mt-2">
 				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="userPassword2"/>

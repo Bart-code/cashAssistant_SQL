@@ -9,7 +9,6 @@
 	}
 	else
 	{
-
 		$registrationOK=true;
 		$userName=$_POST['userName'];
 		$userLastName=$_POST['userLastName'];
@@ -17,7 +16,6 @@
 		$userEmail=$_POST['userEmail'];
 		$userPassword1=$_POST['userPassword1'];
 		$userPassword2=$_POST['userPassword2'];
-		
 		
 		//check name
 		if(strlen($userName) <6 || strlen($userName) >20)
@@ -72,6 +70,13 @@
 			$registrationOK=false;
 		}
 		
+		//remember informations
+		
+		$_SESSION['remember_name']=$userName;
+		$_SESSION['remember_lastName']=$userLastName;
+		$_SESSION['remember_email']=$userEmail;
+		$_SESSION['remember_login']=$userLogin;
+		
 		if(!$registrationOK)
 		{
 			header('Location: registrationSite.php');
@@ -80,9 +85,12 @@
 		else
 		{
 			$passwordHash = password_hash($userPassword1, PASSWORD_DEFAULT);
-
-				$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
-				$dataBaseConnect->query($sqlRequest);
+			$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
+			$dataBaseConnect->query($sqlRequest);
+			unset($_SESSION['remember_name']);
+			unset($_SESSION['remember_lastName']);
+			unset($_SESSION['remember_email']);
+			unset($_SESSION['remember_login']);
 		}
 	}
 	$dataBaseConnect->close();
