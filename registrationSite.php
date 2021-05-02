@@ -58,12 +58,26 @@
 			</div>
 			<div class="row " >
 				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="userEmail"/>
+				<?php
+					if(isset($_SESSION['error_email']))
+					{
+						echo "<span class='errorStyle mb-1'>".$_SESSION['error_email']."</span>";
+						unset($_SESSION['error_email']);
+					}
+				?>
 			</div>
 			<div class="row rowMargin">
 				Login:
 			</div>
 			<div class="row" >
 				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="userLogin"/>
+				<?php
+					if(isset($_SESSION['error_login']))
+					{
+						echo "<span class='errorStyle mb-1'>".$_SESSION['error_login']."</span>";
+						unset($_SESSION['error_login']);
+					}
+				?>
 			</div>
 			<div class="row rowMargin">
 				Password
@@ -74,6 +88,13 @@
 			<div class="row mt-2">
 				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="userPassword2"/>
 			</div>
+			<?php
+					if(isset($_SESSION['error_password']))
+					{
+						echo "<span class='errorStyle mb-1'>".$_SESSION['error_password']."</span>";
+						unset($_SESSION['error_password']);
+					}
+				?>
 			<div class="row mt-5">
 				<div class="col-sm ">
 					<a class="btn buttonsStyle" href="index.html" role="button">

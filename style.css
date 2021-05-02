@@ -85,8 +85,8 @@ h2
 
 .errorStyle
 {
-	font-size: 4px !important;
-	color: #166 !important;
+	font-size: 18px !important;
+	color: #a66 !important;
 }
 
 @media(max-width: 575px)

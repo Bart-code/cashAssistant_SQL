@@ -3,7 +3,6 @@
 	session_start();
 	require_once "connect.php";
 	$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
-	
 	if($dataBaseConnect->connect_errno!=0)
 	{
 		$_SESSION['dbError']=$dataBaseConnect->connect_errno;
@@ -35,21 +34,43 @@
 		}
 		
 		//check email
+		
+		$userEmailAfterSanitize = filter_var($userEmail, FILTER_SANITIZE_EMAIL);
+		if(   (filter_var( $userEmailAfterSanitize,   FILTER_VALIDATE_EMAIL )  == false )  ||   
+		 ($userEmailAfterSanitize !=  $userEmail)  )
+		{
+			$_SESSION['error_email']="Email is incorrect";
+			$registrationOK=false;
+		}
+		
 		//check login
 		
-		$zapytanie="SELECT id FROM users WHERE username=''";
-		/*if(strlen($userLogin) <6 || strlen($userLogin) >20)
+		$zapytanie="SELECT users.id FROM users WHERE users.login='$userLogin'";
+		$rezultat = $dataBaseConnect->query($zapytanie);
+		$ilu = $rezultat->num_rows;
+		if(  $ilu > 0)
 		{
-			$_SESSION['error_login']="User-name must be (6-20)";
+			$_SESSION['error_login']="This login already exist";
 			$registrationOK=false;
 		}
-		else
+		
+		if(strlen($userLogin) <6 || strlen($userLogin) >20)
 		{
-			$_SESSION['error_login']="User-name field is empty";
+			$_SESSION['error_login']="Login must be (6-20)";
 			$registrationOK=false;
 		}
-		*/
+	
 		//check passwords
+		if(strlen($userPassword1) <6 || strlen($userPassword1) >20)
+		{
+			$_SESSION['error_password']="Password must be (6-20)";
+			$registrationOK=false;
+		}
+		else if($userPassword1 != $userPassword2)
+		{
+			$_SESSION['error_password']="Passwords are different";
+			$registrationOK=false;
+		}
 		
 		if(!$registrationOK)
 		{
