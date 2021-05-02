@@ -45,10 +45,10 @@
 		
 		//check login
 		
-		$zapytanie="SELECT users.id FROM users WHERE users.login='$userLogin'";
-		$rezultat = $dataBaseConnect->query($zapytanie);
-		$ilu = $rezultat->num_rows;
-		if(  $ilu > 0)
+		$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
+		$result = $dataBaseConnect->query($sqlRequest);
+		$usersCount = $result->num_rows;
+		if(  $usersCount > 0)
 		{
 			$_SESSION['error_login']="This login already exist";
 			$registrationOK=false;
@@ -76,6 +76,13 @@
 		{
 			header('Location: registrationSite.php');
 			exit();
+		}
+		else
+		{
+			$passwordHash = password_hash($userPassword1, PASSWORD_DEFAULT);
+
+				$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
+				$dataBaseConnect->query($sqlRequest);
 		}
 	}
 	$dataBaseConnect->close();
@@ -111,7 +118,7 @@
 							Error code: ".$_SESSION['dbError'];
 					}
 					else
-					{
+ 					{
 						echo "Registration succesfull !";
 					}
 				?>

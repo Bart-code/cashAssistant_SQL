@@ -14,7 +14,7 @@
 	
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="style.css" /> 
 	<link rel="stylesheet" href="fontello/css/fontello.css" type="text/css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
 	
@@ -91,13 +91,13 @@
 			<?php
 					if(isset($_SESSION['error_password']))
 					{
-						echo "<span class='errorStyle mb-1'>".$_SESSION['error_password']."</span>";
+						echo "<span class='errorStyle'>".$_SESSION['error_password']."</span>";
 						unset($_SESSION['error_password']);
 					}
 				?>
 			<div class="row mt-5">
 				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="index.html" role="button">
+					<a class="btn buttonsStyle" href="index.php" role="button">
 						<i class="icon-left-big"></i> Back
 					</a>
 				</div>

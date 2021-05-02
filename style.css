@@ -7,6 +7,8 @@ body
 	font-family: 'Roboto Slab', serif;
 }
 
+
+
 h1
 {
 	font-size: 60px;
@@ -85,9 +87,11 @@ h2
 
 .errorStyle
 {
-	font-size: 18px !important;
-	color: #a66 !important;
+	color: white; 
+	font-size: 18px;
 }
+
+
 
 @media(max-width: 575px)
 {
