@@ -32,8 +32,8 @@
 				$result = $dataBaseConnect->query($sqlRequest);
 				$row = $result->fetch_assoc();
 				$result->free_result();
-				$inputPassword=password_hash( $_POST['userPassword'] , PASSWORD_DEFAULT );
-				if(!password_verify( $inputPassword , $row['password'] ))
+				$passwordFromDB=$row['password'];
+				if(!password_verify( $_POST['userPassword'] , $passwordFromDB ))
 				{
 					$_SESSION['error_password']="Password is incorrect";
 					$LoggingOK=false;
@@ -57,7 +57,7 @@
 		else
 		{
 			unset($_SESSION['remember_login']);
-			header('Location: mainSite.html');
+			header('Location: mainSite.php');
 			exit();
 		}
 	}
