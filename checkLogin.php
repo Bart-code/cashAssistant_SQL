@@ -1,5 +1,4 @@
 <?php
-	
 	session_start();
 	require_once "connect.php";
 	$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
@@ -57,6 +56,7 @@
 		else
 		{
 			unset($_SESSION['remember_login']);
+			$_SESSION['loggingSuccesfull']=true;
 			header('Location: mainSite.php');
 			exit();
 		}

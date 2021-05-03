@@ -1,4 +1,11 @@
-<!DOCTYPE HTML>
+<?php
+	session_start();
+	if( ! isset($_SESSION['loggingSuccesfull']) || $_SESSION['loggingSuccesfull'] != true )
+	{
+		header('Location: index.php');
+		exit();
+	}
+?>
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
