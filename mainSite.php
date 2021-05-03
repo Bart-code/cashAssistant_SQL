@@ -51,7 +51,7 @@
 				</a>
 			</div>
 			<div class="row mt-3 mb-3 col-lg-6 col-md-8 col-sm-10 mx-auto">
-				<a class="btn buttonsStyle" href="index.html" role="button">
+				<a class="btn buttonsStyle" href="logout.php" role="button">
 					Logout
 				</a>
 			</div>

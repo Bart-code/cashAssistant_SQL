@@ -1,5 +1,10 @@
 <?php
 	session_start();
+	if( isset($_SESSION['loggingSuccesfull']) && $_SESSION['loggingSuccesfull'] == true )
+	{
+		header('Location: mainSite.php');
+		exit();
+	}
 ?>
 
 <html lang="pl">
