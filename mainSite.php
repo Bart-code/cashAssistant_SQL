@@ -14,14 +14,11 @@
 	<meta name="description" content="Zapanuj nad finansami" />
 	<meta name="keywords" content="finanse, pieniądze, budżet" />
 	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-	
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="fontello/css/fontello.css" type="text/css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
-	
 </head>
 
 <body>
@@ -31,17 +28,17 @@
 	<div class="container bg-container">
 		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4">
 			<div class="row mt-3 mb-3 col-lg-6 col-md-8 col-sm-10 mx-auto">
-				<a class="btn buttonsStyle" href="incomeSite.html" role="button">
+				<a class="btn buttonsStyle" href="incomeSite.php" role="button">
 					Add income
 				</a>
 			</div>
 			<div class="row mt-3 mb-3 col-lg-6 col-md-8 col-sm-10 mx-auto">
-				<a class="btn buttonsStyle" href="#" role="button">
+				<a class="btn buttonsStyle" href="expenseSite.php" role="button">
 					Add expense
 				</a>
 			</div>
 			<div class="row mt-3 mb-3 col-lg-6 col-md-8 col-sm-10 mx-auto">
-				<a class="btn buttonsStyle" href="#" role="button">
+				<a class="btn buttonsStyle" href="balanceSite.php" role="button">
 					Show balance
 				</a>
 			</div>

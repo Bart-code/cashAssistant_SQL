@@ -1,4 +1,16 @@
-<!DOCTYPE HTML>
+<?php
+	session_start();
+	if( ! isset($_SESSION['loggingSuccesfull']) || $_SESSION['loggingSuccesfull'] != true )
+	{
+		header('Location: index.php');
+		exit();
+	}
+	
+	if( isset($_POST('incomeAmount')) )
+	{
+		
+	}
+?>
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
@@ -7,14 +19,11 @@
 	<meta name="description" content="Zapanuj nad finansami" />
 	<meta name="keywords" content="finanse, pieniądze, budżet" />
 	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-	
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="fontello/css/fontello.css" type="text/css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
-	
 	<script>
 	
 	function setTimeToField() {
@@ -38,52 +47,53 @@
 	</header>
 	<div class="container bg-container">
 		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
-			<div class="row">	
-				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row pb-1">
-						Amount:
+			<form method="post">
+				<div class="row">	
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Amount:
+						</div>
+						<div class="row pb-2">
+							<input type="number" class="textField" name="incomeAmount" placeholder="Income amount" aria-label="Income">
+						</div>
+						<div class="row pb-1">
+							Date:
+						</div>
+						<div class="row pb-2">
+							<input type="date" class="textField" name="incomeDate"  id="dateField" aria-label="Date">
+						</div>
+						<div class="row pb-1">
+							Item:
+						</div>
+						<div class="row pb-2">
+							<select id="Item" class="textField" name="incomeItem" >
+								<option> Graduate </option>
+								<option> Bank</option>
+								<option> Allegro sale </option>
+								<option> Other </option>
+							</select>
+						</div>
 					</div>
-					<div class="row pb-2">
-						<input type="number" class="textField" placeholder="Income amount" aria-label="Income">
-					</div>
-					<div class="row pb-1">
-						Date:
-					</div>
-					<div class="row pb-2">
-						<input type="date" class="textField" id="dateField" aria-label="Date">
-					</div>
-					<div class="row pb-1">
-						Item:
-					</div>
-					<div class="row pb-2">
-						<select id="Item" class="textField">
-							<option> Graduate </option>
-							<option> Bank</option>
-							<option> Allegro sale </option>
-							<option> Other </option>
-						</select>
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Comment:
+						</div>
+						<div class="row">
+							<textarea class="textField textarea" name="incomeComment" > </textarea>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row pb-1">
-						Comment:
+				<div class="row mt-5">
+					<div class="col-sm">
+						<a class="btn buttonsStyle" href="index.html" role="button">
+							<i class="icon-left-big"></i> Back
+						</a>
 					</div>
-					<div class="row">
-						<textarea class="textField textarea" > </textarea>
+					<div class="col-sm ">
+						<input class="btn buttonsStyle" type="submit" value="submit"/>
 					</div>
 				</div>
-			</div>
-
-			<div class="row mt-5">
-				<div class="col-sm">
-					<a class="btn buttonsStyle" href="index.html" role="button">
-						<i class="icon-left-big"></i> Back
-					</a>
-				</div>
-				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="index.html" role="button">Submit</a>
-				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 	
