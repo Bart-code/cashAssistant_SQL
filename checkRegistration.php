@@ -90,6 +90,13 @@
 			$passwordHash = password_hash($userPassword1, PASSWORD_DEFAULT);
 			$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
 			$dataBaseConnect->query($sqlRequest);
+			$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
+			$result=$dataBaseConnect->query($sqlRequest);
+			$row=$result->fetch_assoc();
+			$userId=$row['id'];
+			$result->free_result();
+			$sqlRequest="INSERT INTO incomes_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', incomes_category_default.name FROM incomes_category_default";
+			$dataBaseConnect->query($sqlRequest);
 			unset($_SESSION['remember_name']);
 			unset($_SESSION['remember_lastName']);
 			unset($_SESSION['remember_email']);
