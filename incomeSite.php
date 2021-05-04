@@ -5,6 +5,11 @@
 		header('Location: index.php');
 		exit();
 	}
+	
+	if( isset($_POST('incomeAmount')) )
+	{
+		
+	}
 ?>
 <html lang="pl">
 <head>
@@ -85,7 +90,7 @@
 						</a>
 					</div>
 					<div class="col-sm ">
-						<input class="btn buttonsStyle" role="submit" />
+						<input class="btn buttonsStyle" type="submit" value="submit"/>
 					</div>
 				</div>
 			</form>
