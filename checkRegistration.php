@@ -96,6 +96,7 @@
 			$userId=$row['id'];
 			$result->free_result();
 			$sqlRequest="INSERT INTO incomes_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', incomes_category_default.name FROM incomes_category_default";
+			$dataBaseConnect->query($sqlRequest);$sqlRequest="INSERT INTO expenses_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', expenses_category_default.name FROM expenses_category_default";
 			$dataBaseConnect->query($sqlRequest);
 			unset($_SESSION['remember_name']);
 			unset($_SESSION['remember_lastName']);
