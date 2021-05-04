@@ -89,6 +89,7 @@
 		{
 			$passwordHash = password_hash($userPassword1, PASSWORD_DEFAULT);
 			$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
+			//copy categories from default
 			$dataBaseConnect->query($sqlRequest);
 			$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
 			$result=$dataBaseConnect->query($sqlRequest);
@@ -97,6 +98,8 @@
 			$result->free_result();
 			$sqlRequest="INSERT INTO incomes_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', incomes_category_default.name FROM incomes_category_default";
 			$dataBaseConnect->query($sqlRequest);$sqlRequest="INSERT INTO expenses_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', expenses_category_default.name FROM expenses_category_default";
+			$dataBaseConnect->query($sqlRequest);
+			$dataBaseConnect->query($sqlRequest);$sqlRequest="INSERT INTO payment_methods_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL,'$userId', payment_methods_default.name FROM payment_methods_default";
 			$dataBaseConnect->query($sqlRequest);
 			unset($_SESSION['remember_name']);
 			unset($_SESSION['remember_lastName']);
