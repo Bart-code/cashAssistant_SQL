@@ -50,14 +50,22 @@
 		}
 		else
 		{
-			$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
-			$result = $dataBaseConnect->query($sqlRequest);
-			$usersCount = $result->num_rows;
-			$result->free_result();
-			if(  $usersCount > 0)
+			$result = @$dataBaseConnect->query(
+			sprintf("SELECT users.id FROM users WHERE users.login='%s'",
+			mysqli_real_escape_string($dataBaseConnect,$userLogin)));
+			if($dataBaseConnect->connect_errno!=0)
 			{
-				$_SESSION['error_login']="This login already exist";
-				$registrationOK=false;
+				$_SESSION['dbError']=$dataBaseConnect->connect_errno;
+			}
+			elseif($result)
+			{
+				$usersCount = $result->num_rows;
+				if(  $usersCount > 0)
+				{
+					$_SESSION['error_login']="This login already exist";
+					$registrationOK=false;
+				}
+				$result->free_result();
 			}
 		}
 	
@@ -85,7 +93,7 @@
 			header('Location: registrationSite.php');
 			exit();
 		}
-		else
+		elseif(!isset($_SESSION['dbError']))
 		{
 			$passwordHash = password_hash($userPassword1, PASSWORD_DEFAULT);
 			$sqlRequest="INSERT INTO users VALUES (NULL, '$userName', '$userLastName', '$userEmail', '$userLogin', '$passwordHash')";
@@ -107,7 +115,10 @@
 			unset($_SESSION['remember_login']);
 		}
 	}
-	$dataBaseConnect->close();
+	if(!isset($_SESSION['dbError']))
+	{
+		$dataBaseConnect->close();
+	}
 ?> 
 
 
@@ -151,8 +162,6 @@
 				</a>
 			</div>
 		</div>
-		
-		
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	unset($_SESSION['dbError']);
 	if( isset($_SESSION['loggingSuccesfull']) && $_SESSION['loggingSuccesfull'] == true )
 	{
 		header('Location: mainSite.php');
