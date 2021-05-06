@@ -1,14 +1,48 @@
 <?php
 	session_start();
+	unset($_SESSION['categoryError']);
 	if( ! isset($_SESSION['loggingSuccesfull']) || $_SESSION['loggingSuccesfull'] != true )
 	{
 		header('Location: index.php');
 		exit();
 	}
-	
-	if( isset($_POST('incomeAmount')) )
+	elseif( isset($_POST['incomeAmount']) )
 	{
-		
+
+	}
+	else
+	{
+		require_once "connect.php";
+		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
+		if($dataBaseConnect->connect_errno!=0)
+		{
+			$_SESSION['dbError']=$dataBaseConnect->connect_errno;
+			echo "Kod błędu:".$_SESSION['dbError'];
+		}
+		else
+		{
+			$userId=1;//$_SESSION['loggedUserID'];
+			echo 'userId';
+			$sqlRequest="SELECT incomes_category_assigned_to_users.name
+			FROM incomes_category_assigned_to_users
+			WHERE incomes_category_assigned_to_users.user_id='$userId'";
+			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+			{
+				if($result->num_rows)
+				{
+					$rowsCount=$result->num_rows;
+					for($i=0;$i<$rowsCount;$i++)
+					{
+						$row = $result->fetch_assoc();
+						$categoryMatrix[$i] = $row['name'];
+					}
+				}
+				$result->close();
+				$dataBaseConnect->close();
+			}
+			else $_SESSION['categoryError']="Something gone wrong";
+			
+		}
 	}
 ?>
 <html lang="pl">
@@ -67,10 +101,12 @@
 						</div>
 						<div class="row pb-2">
 							<select id="Item" class="textField" name="incomeItem" >
-								<option> Graduate </option>
-								<option> Bank</option>
-								<option> Allegro sale </option>
-								<option> Other </option>
+								<?php
+									for($i=0;$i<$rowsCount;$i++)
+									{
+										echo "<option>".$categoryMatrix[$i]."</option>";
+									}
+								?>
 							</select>
 						</div>
 					</div>
@@ -85,7 +121,7 @@
 				</div>
 				<div class="row mt-5">
 					<div class="col-sm">
-						<a class="btn buttonsStyle" href="index.html" role="button">
+						<a class="btn buttonsStyle" href="index.php" role="button">
 							<i class="icon-left-big"></i> Back
 						</a>
 					</div>
