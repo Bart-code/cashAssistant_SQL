@@ -23,11 +23,15 @@
 			$sqlRequest="SELECT users.id FROM users WHERE users.login='$userLogin'";
 			$result = $dataBaseConnect->query($sqlRequest);
 			$usersCount = $result->num_rows;
+			
 			if(  $usersCount > 0)
 			{
+				$row = $result->fetch_assoc();
+				$userId=$row['id'];
+				$result->free_result();
+				
 				//check password
 				$sqlRequest="SELECT users.password FROM users WHERE users.login='$userLogin'";
-				$result->free_result();
 				$result = $dataBaseConnect->query($sqlRequest);
 				$row = $result->fetch_assoc();
 				$result->free_result();
@@ -57,6 +61,7 @@
 		{
 			unset($_SESSION['remember_login']);
 			$_SESSION['loggingSuccesfull']=true;
+			$_SESSION['loggedUserId']=$userId;
 			header('Location: mainSite.php');
 			exit();
 		}
