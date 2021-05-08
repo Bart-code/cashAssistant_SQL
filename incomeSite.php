@@ -1,15 +1,37 @@
 <?php
 	session_start();
 	unset($_SESSION['categoryError']);
+	// unlogged
 	if( ! isset($_SESSION['loggingSuccesfull']) || $_SESSION['loggingSuccesfull'] != true )
 	{
 		header('Location: index.php');
 		exit();
 	}
+	//after submit
 	elseif( isset($_POST['incomeAmount']) )
 	{
-
+		$incomeItem=$_POST['incomeItem'];
+		$userId=$_SESSION['loggedUserId'];
+		require_once "connect.php";
+		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
+		$sqlRequest="SELECT incomes_category_assigned_to_users.id
+		FROM incomes_category_assigned_to_users
+		WHERE incomes_category_assigned_to_users.user_id='$userId' 
+		AND incomes_category_assigned_to_users.name='$incomeItem'";
+		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+		{
+			$row=$result->fetch_assoc();
+			$categoryId=$row['id'];
+			$incomeAmount=$_POST['incomeAmount'];
+			$incomeDate=$_POST['incomeDate'];
+			$incomeComment=$_POST['incomeComment'];
+			$sqlRequest="INSERT INTO incomes VALUES ( NULL, '$userId', '$categoryId','$incomeAmount', '$incomeDate', '$incomeComment' )";
+			mysqli_query($dataBaseConnect,$sqlRequest);
+		}
+		else echo "WRONG !";
 	}
+	
+	//before submit
 	else
 	{
 		require_once "connect.php";
@@ -21,8 +43,7 @@
 		}
 		else
 		{
-			$userId=1;//$_SESSION['loggedUserID'];
-			echo 'userId';
+			$userId=$_SESSION['loggedUserId'];
 			$sqlRequest="SELECT incomes_category_assigned_to_users.name
 			FROM incomes_category_assigned_to_users
 			WHERE incomes_category_assigned_to_users.user_id='$userId'";
@@ -37,11 +58,11 @@
 						$categoryMatrix[$i] = $row['name'];
 					}
 				}
+				else $_SESSION['categoryError']="Something gone wrong";
 				$result->close();
 				$dataBaseConnect->close();
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
-			
 		}
 	}
 ?>
@@ -102,9 +123,13 @@
 						<div class="row pb-2">
 							<select id="Item" class="textField" name="incomeItem" >
 								<?php
-									for($i=0;$i<$rowsCount;$i++)
+									if(isset( $_SESSION['categoryError']) ) echo "<option>". $_SESSION['categoryError']."</option>";
+									else
 									{
-										echo "<option>".$categoryMatrix[$i]."</option>";
+										for($i=0;$i<$rowsCount;$i++)
+										{
+											echo "<option>".$categoryMatrix[$i]."</option>";
+										}
 									}
 								?>
 							</select>
@@ -126,7 +151,7 @@
 						</a>
 					</div>
 					<div class="col-sm ">
-						<input class="btn buttonsStyle" type="submit" value="submit"/>
+						<input class="btn buttonsStyle" type="submit" value="Submit"/>
 					</div>
 				</div>
 			</form>
