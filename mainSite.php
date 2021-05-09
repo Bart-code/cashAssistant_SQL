@@ -5,6 +5,7 @@
 		header('Location: index.php');
 		exit();
 	}
+	unset($_SESSION['showModal']);
 ?>
 <html lang="pl">
 <head>
