@@ -1,4 +1,73 @@
-<!DOCTYPE HTML>
+<?php
+	session_start();
+	unset($_SESSION['categoryError']);
+	// unlogged
+	if( ! isset($_SESSION['loggingSuccesfull']) || $_SESSION['loggingSuccesfull'] != true )
+	{
+		header('Location: index.php');
+		exit();
+	}
+	//after submit
+	elseif( isset($_POST['incomeAmount']) )
+	{
+		$incomeItem=$_POST['incomeItem'];
+		$userId=$_SESSION['loggedUserId'];
+		require_once "connect.php";
+		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
+		$sqlRequest="SELECT incomes_category_assigned_to_users.id
+		FROM incomes_category_assigned_to_users
+		WHERE incomes_category_assigned_to_users.user_id='$userId' 
+		AND incomes_category_assigned_to_users.name='$incomeItem'";
+		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+		{
+			$row=$result->fetch_assoc();
+			$categoryId=$row['id'];
+			$incomeAmount=$_POST['incomeAmount'];
+			$incomeDate=$_POST['incomeDate'];
+			$incomeComment=$_POST['incomeComment'];
+			$sqlRequest="INSERT INTO incomes VALUES ( NULL, '$userId', '$categoryId','$incomeAmount', '$incomeDate', '$incomeComment' )";
+			mysqli_query($dataBaseConnect,$sqlRequest);
+			$_SESSION['showModal']=true;
+		}
+		else echo "WRONG !";
+	}
+	
+	//before submit
+	else
+	{
+		require_once "connect.php";
+		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
+		if($dataBaseConnect->connect_errno!=0)
+		{
+			$_SESSION['dbError']=$dataBaseConnect->connect_errno;
+			echo "Kod błędu:".$_SESSION['dbError'];
+		}
+		else
+		{
+			$userId=$_SESSION['loggedUserId'];
+			$sqlRequest="SELECT incomes_category_assigned_to_users.name
+			FROM incomes_category_assigned_to_users
+			WHERE incomes_category_assigned_to_users.user_id='$userId'";
+			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+			{
+				if($result->num_rows)
+				{
+					$rowsCount=$result->num_rows;
+					for($i=0;$i<$rowsCount;$i++)
+					{
+						$row = $result->fetch_assoc();
+						$categoryMatrix[$i] = $row['name'];
+					}
+				}
+				else $_SESSION['categoryError']="Something gone wrong";
+				$result->close();
+				$dataBaseConnect->close();
+			}
+			else $_SESSION['categoryError']="Something gone wrong";
+		}
+	}
+?>
+
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
@@ -15,7 +84,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
 	
 	<script>
-	
 		function setTimeToField() {
 			var now = new Date();
 			var month = (now.getMonth() + 1);               
@@ -28,6 +96,14 @@
 			document.getElementById("dateField").value = today;
 		}
 	</script>
+	
+	<?php if (isset($_SESSION['showModal']) && $_SESSION['showModal']) { ?>
+		<script type='text/javascript'>
+			$(document).ready(function(){
+			$('#exampleModal').modal('show');
+			});
+		</script>
+	<?php } ?>
 
 </head>
 
@@ -39,77 +115,86 @@
 	</header>
 	
 	<div class="container bg-container">
-		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
-			<div class="row">	
-				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row pb-1">
-						Amount:
+		<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content modalStyle">
+				  <div class="modalStyle">
+					Expense add succesfull !
+				  </div>
+				  <div class="modal-footer">
+					<div class="mx-auto">
+						<a class="btn buttonsStyle" href="mainSite.php" role="button">
+							OK
+						</a>
 					</div>
-					<div class="row pb-2">
-						<input type="number" class="textField" placeholder="Expense amount (zł)" aria-label="Income">
-					</div>
-					<div class="row pb-1">
-						Date:
-					</div>
-					<div class="row pb-2">
-						<input type="date" class="textField" id="dateField" aria-label="Date">
-					</div>
-					<div class="row pb-1">
-						Payment type:
-					</div>
-					<div class="row pb-2">
-						<select  class="textField">
-							<option> Cash </option>
-							<option> Debit card</option>
-							<option> Credit card</option>
-						</select>
-					</div>
-					<div class="row pb-1">
-						Item:
-					</div>
-					<div class="row pb-2">
-						<select id="Item" class="textField">
-							<option> Food </option>
-							<option> Flat </option>
-							<option> Transport </option>
-							<option> Telecommunication </option>
-							<option> Healthcare </option>
-							<option> Clothes </option>
-							<option> Hygiene </option>
-							<option> Children </option>
-							<option> Entertainment </option>
-							<option> Trip </option>
-							<option> Course </option>
-							<option> Books/movies </option>
-							<option> Savings </option>
-							<option> Pension - gold spring </option>
-							<option> Pay dept </option>
-							<option> Donation </option>
-							<option> Other </option>
-						</select>
-					</div>
+				  </div>
 				</div>
-				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row pb-1">
-						Comment:
-					</div>
-					<div class="row">
-						<textarea class="textField textarea" > </textarea>
-					</div>
-				</div>
+			  </div>
 			</div>
+		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
+			<form method="post">
+				<div class="row">	
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Amount:
+						</div>
+						<div class="row pb-2">
+							<input type="number" class="textField" name="expenseAmount" placeholder="Expense amount (zł)" aria-label="Income">
+						</div>
+						<div class="row pb-1">
+							Date:
+						</div>
+						<div class="row pb-2">
+							<input type="date" name="expenseDate" class="textField" id="dateField" aria-label="Date">
+						</div>
+						<div class="row pb-1">
+							Payment type:
+						</div>
+						<div class="row pb-2" >
+							<select  class="textField" name="expensePayment">
+								<option> Cash </option>
+								<option> Debit card</option>
+								<option> Credit card</option>
+							</select>
+						</div>
+						<div class="row pb-1">
+							Item:
+						</div>
+						<div class="row pb-2">
+							<select id="Item" class="textField" name="expenseItem">
+								<?php
+									if(isset( $_SESSION['categoryError']) ) echo "<option>". $_SESSION['categoryError']."</option>";
+									else
+									{
+										for($i=0;$i<$rowsCount;$i++)
+										{
+											echo "<option>".$categoryMatrix[$i]."</option>";
+										}
+									}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Comment:
+						</div>
+						<div class="row">
+							<textarea class="textField textarea" > </textarea>
+						</div>
+					</div>
+				</div>
+			</form>
 
 			<div class="row mt-5">
 				<div class="col-sm">
-					<a class="btn buttonsStyle" href="mainSite.html" role="button">
+					<a class="btn buttonsStyle" href="mainSite.php" role="button">
 						<i class="icon-left-big"></i> Back
 					</a>
 				</div>
 				<div class="col-sm ">
-					<!-- Button trigger modal -->
-					<button type="button"  class="btn buttonsStyle"   data-toggle="modal" data-target="#exampleModalCenter">
-						Add expense
-					</button>	
+					<input class="btn buttonsStyle" type="submit" value="Submit" data-toggle="modal" data-target="#exampleModal"/>
 				</div>
 			</div>
 		</div>
