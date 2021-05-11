@@ -91,7 +91,12 @@ h2
 	font-size: 18px;
 }
 
-
+.modalStyle
+{
+	background-color: #58C1D2 !important;
+	color: white;
+	border-radius: 30px !important;
+}
 
 @media(max-width: 575px)
 {
