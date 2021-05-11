@@ -8,24 +8,26 @@
 		exit();
 	}
 	//after submit
-	elseif( isset($_POST['incomeAmount']) )
+	elseif( isset($_POST['expenseAmount']) )
 	{
-		$incomeItem=$_POST['incomeItem'];
+		$expenseItem=$_POST['expenseItem'];
 		$userId=$_SESSION['loggedUserId'];
 		require_once "connect.php";
 		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
-		$sqlRequest="SELECT incomes_category_assigned_to_users.id
-		FROM incomes_category_assigned_to_users
-		WHERE incomes_category_assigned_to_users.user_id='$userId' 
-		AND incomes_category_assigned_to_users.name='$incomeItem'";
+		$sqlRequest="SELECT expenses_category_assigned_to_users.id
+		FROM expenses_category_assigned_to_users
+		WHERE expenses_category_assigned_to_users.user_id='$userId' 
+		AND expenses_category_assigned_to_users.name='$expenseItem'";
 		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
 		{
 			$row=$result->fetch_assoc();
 			$categoryId=$row['id'];
-			$incomeAmount=$_POST['incomeAmount'];
-			$incomeDate=$_POST['incomeDate'];
-			$incomeComment=$_POST['incomeComment'];
-			$sqlRequest="INSERT INTO incomes VALUES ( NULL, '$userId', '$categoryId','$incomeAmount', '$incomeDate', '$incomeComment' )";
+			$expenseAmount=$_POST['expenseAmount'];
+			$expenseDate=$_POST['expenseDate'];
+			$expenseComment=$_POST['expenseComment'];
+			$sqlRequest="INSERT INTO expenses VALUES ( NULL, '$userId', '$categoryId', 1, '$expenseAmount', '$expenseDate', '$expenseComment' )";
+			echo "good";
+			echo $sqlRequest;
 			mysqli_query($dataBaseConnect,$sqlRequest);
 			$_SESSION['showModal']=true;
 		}
@@ -45,9 +47,9 @@
 		else
 		{
 			$userId=$_SESSION['loggedUserId'];
-			$sqlRequest="SELECT incomes_category_assigned_to_users.name
-			FROM incomes_category_assigned_to_users
-			WHERE incomes_category_assigned_to_users.user_id='$userId'";
+			$sqlRequest="SELECT expenses_category_assigned_to_users.name
+			FROM expenses_category_assigned_to_users
+			WHERE expenses_category_assigned_to_users.user_id='$userId'";
 			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
 			{
 				if($result->num_rows)
@@ -65,6 +67,7 @@
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
 		}
+		echo "1 step";
 	}
 ?>
 
@@ -97,7 +100,11 @@
 		}
 	</script>
 	
-	<?php if (isset($_SESSION['showModal']) && $_SESSION['showModal']) { ?>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+ 
+	<?php if (isset($_SESSION['showModal']) && $_SESSION['showModal']==true) { ?>
 		<script type='text/javascript'>
 			$(document).ready(function(){
 			$('#exampleModal').modal('show');
@@ -140,7 +147,7 @@
 							Amount:
 						</div>
 						<div class="row pb-2">
-							<input type="number" class="textField" name="expenseAmount" placeholder="Expense amount (zł)" aria-label="Income">
+							<input type="number" class="textField" name="expenseAmount" placeholder="Expense amount (zł)" aria-label="Expensse">
 						</div>
 						<div class="row pb-1">
 							Date:
@@ -181,26 +188,23 @@
 							Comment:
 						</div>
 						<div class="row">
-							<textarea class="textField textarea" > </textarea>
+							<textarea class="textField textarea" name="expenseComment"> </textarea>
 						</div>
 					</div>
 				</div>
+				<div class="row mt-5">
+					<div class="col-sm">
+						<a class="btn buttonsStyle" href="mainSite.php" role="button">
+							<i class="icon-left-big"></i> Back
+						</a>
+					</div>
+					<div class="col-sm ">
+						<input class="btn buttonsStyle" type="submit" value="Submit" />
+					</div>
+				</div>
 			</form>
-
-			<div class="row mt-5">
-				<div class="col-sm">
-					<a class="btn buttonsStyle" href="mainSite.php" role="button">
-						<i class="icon-left-big"></i> Back
-					</a>
-				</div>
-				<div class="col-sm ">
-					<input class="btn buttonsStyle" type="submit" value="Submit" data-toggle="modal" data-target="#exampleModal"/>
-				</div>
-			</div>
 		</div>
 	</div>
-	
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	
