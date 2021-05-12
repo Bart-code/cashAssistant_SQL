@@ -7,32 +7,7 @@
 		header('Location: index.php');
 		exit();
 	}
-	//after submit
-	elseif( isset($_POST['incomeAmount']) )
-	{
-		$incomeItem=$_POST['incomeItem'];
-		$userId=$_SESSION['loggedUserId'];
-		require_once "connect.php";
-		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
-		$sqlRequest="SELECT incomes_category_assigned_to_users.id
-		FROM incomes_category_assigned_to_users
-		WHERE incomes_category_assigned_to_users.user_id='$userId' 
-		AND incomes_category_assigned_to_users.name='$incomeItem'";
-		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
-		{
-			$row=$result->fetch_assoc();
-			$categoryId=$row['id'];
-			$incomeAmount=$_POST['incomeAmount'];
-			$incomeDate=$_POST['incomeDate'];
-			$incomeComment=$_POST['incomeComment'];
-			$sqlRequest="INSERT INTO incomes VALUES ( NULL, '$userId', '$categoryId','$incomeAmount', '$incomeDate', '$incomeComment' )";
-			mysqli_query($dataBaseConnect,$sqlRequest);
-			$_SESSION['showModal']=true;
-		}
-		else echo "WRONG !";
-	}
 	
-	//before submit
 	else
 	{
 		require_once "connect.php";
@@ -60,12 +35,43 @@
 					}
 				}
 				else $_SESSION['categoryError']="Something gone wrong";
-				$result->close();
-				$dataBaseConnect->close();
+				;
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
 		}
+		
+		//after submit
+		if( isset($_POST['incomeAmount']) )
+		{
+			if($_POST['incomeAmount']>0)
+			{
+				$incomeItem=$_POST['incomeItem'];
+				$sqlRequest="SELECT incomes_category_assigned_to_users.id
+				FROM incomes_category_assigned_to_users
+				WHERE incomes_category_assigned_to_users.user_id='$userId' 
+				AND incomes_category_assigned_to_users.name='$incomeItem'";
+				if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+				{
+					$row=$result->fetch_assoc();
+					$categoryId=$row['id'];
+					$incomeAmount=$_POST['incomeAmount'];
+					$incomeDate=$_POST['incomeDate'];
+					$incomeComment=$_POST['incomeComment'];
+					$sqlRequest="INSERT INTO incomes VALUES ( NULL, '$userId', '$categoryId','$incomeAmount', '$incomeDate', '$incomeComment' )";
+					mysqli_query($dataBaseConnect,$sqlRequest);
+					$_SESSION['showModal']=true;
+				}
+				else echo "WRONG !";
+			}
+			else
+			{
+				$_SESSION['amountError']="Please enter correct value!";
+			}
+		}
+		$result->close();
+		$dataBaseConnect->close();
 	}
+	
 ?>
 <html lang="pl">
 <head>
@@ -139,6 +145,13 @@
 						</div>
 						<div class="row pb-2">
 							<input type="number" class="textField" name="incomeAmount" placeholder="Income amount" aria-label="Income">
+							<?php
+								if(isset($_SESSION['amountError']))
+								{
+									echo '<span class="errorStyle mb-0">'.$_SESSION['amountError'].'</span>';
+									unset($_SESSION['amountError']);
+								}
+							?>
 						</div>
 						<div class="row pb-1">
 							Date:
