@@ -26,8 +26,6 @@
 			$expenseDate=$_POST['expenseDate'];
 			$expenseComment=$_POST['expenseComment'];
 			$sqlRequest="INSERT INTO expenses VALUES ( NULL, '$userId', '$categoryId', 1, '$expenseAmount', '$expenseDate', '$expenseComment' )";
-			echo "good";
-			echo $sqlRequest;
 			mysqli_query($dataBaseConnect,$sqlRequest);
 			$_SESSION['showModal']=true;
 		}
@@ -47,6 +45,7 @@
 		else
 		{
 			$userId=$_SESSION['loggedUserId'];
+			//fill expense category
 			$sqlRequest="SELECT expenses_category_assigned_to_users.name
 			FROM expenses_category_assigned_to_users
 			WHERE expenses_category_assigned_to_users.user_id='$userId'";
@@ -62,12 +61,30 @@
 					}
 				}
 				else $_SESSION['categoryError']="Something gone wrong";
+			}
+			else $_SESSION['categoryError']="Something gone wrong";
+			
+			//fill payment method
+			$sqlRequest="SELECT payment_methods_assigned_to_users.name
+			FROM payment_methods_assigned_to_users
+			WHERE payment_methods_assigned_to_users.user_id='$userId'";
+			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+			{
+				if($result->num_rows)
+				{
+					$rowsPaymentCount=$result->num_rows;
+					for($i=0;$i<$rowsPaymentCount;$i++)
+					{
+						$row = $result->fetch_assoc();
+						$paymentMatrix[$i] = $row['name'];
+					}
+				}
+				else $_SESSION['categoryError']="Something gone wrong";
 				$result->close();
 				$dataBaseConnect->close();
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
 		}
-		echo "1 step";
 	}
 ?>
 
@@ -160,9 +177,16 @@
 						</div>
 						<div class="row pb-2" >
 							<select  class="textField" name="expensePayment">
-								<option> Cash </option>
-								<option> Debit card</option>
-								<option> Credit card</option>
+								<?php
+									if(isset( $_SESSION['paymentError']) ) echo "<option>". $_SESSION['paymentError']."</option>";
+									else
+									{
+										for($i=0;$i<$rowsPaymentCount;$i++)
+										{
+											echo "<option>".$paymentMatrix[$i]."</option>";
+										}
+									}
+								?>
 							</select>
 						</div>
 						<div class="row pb-1">
