@@ -7,84 +7,82 @@
 		header('Location: index.php');
 		exit();
 	}
-	//after submit
-	elseif( isset($_POST['expenseAmount']) )
+	
+	else
 	{
-		$expenseItem=$_POST['expenseItem'];
 		$userId=$_SESSION['loggedUserId'];
 		require_once "connect.php";
 		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
-		$sqlRequest="SELECT expenses_category_assigned_to_users.id
+		
+		//fill expense category
+		$sqlRequest="SELECT expenses_category_assigned_to_users.name
 		FROM expenses_category_assigned_to_users
-		WHERE expenses_category_assigned_to_users.user_id='$userId' 
-		AND expenses_category_assigned_to_users.name='$expenseItem'";
+		WHERE expenses_category_assigned_to_users.user_id='$userId'";
 		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
 		{
-			$row=$result->fetch_assoc();
-			$categoryId=$row['id'];
-			$expenseAmount=$_POST['expenseAmount'];
-			$expenseDate=$_POST['expenseDate'];
-			$expenseComment=$_POST['expenseComment'];
-			$sqlRequest="INSERT INTO expenses VALUES ( NULL, '$userId', '$categoryId', 1, '$expenseAmount', '$expenseDate', '$expenseComment' )";
-			mysqli_query($dataBaseConnect,$sqlRequest);
-			$_SESSION['showModal']=true;
-		}
-		else echo "WRONG !";
-	}
-	
-	//before submit
-	else
-	{
-		require_once "connect.php";
-		$dataBaseConnect = new mysqli($host,$db_user,$db_password,$db_name);
-		if($dataBaseConnect->connect_errno!=0)
-		{
-			$_SESSION['dbError']=$dataBaseConnect->connect_errno;
-			echo "Kod błędu:".$_SESSION['dbError'];
-		}
-		else
-		{
-			$userId=$_SESSION['loggedUserId'];
-			//fill expense category
-			$sqlRequest="SELECT expenses_category_assigned_to_users.name
-			FROM expenses_category_assigned_to_users
-			WHERE expenses_category_assigned_to_users.user_id='$userId'";
-			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+			if($result->num_rows)
 			{
-				if($result->num_rows)
+				$rowsCount=$result->num_rows;
+				for($i=0;$i<$rowsCount;$i++)
 				{
-					$rowsCount=$result->num_rows;
-					for($i=0;$i<$rowsCount;$i++)
-					{
-						$row = $result->fetch_assoc();
-						$categoryMatrix[$i] = $row['name'];
-					}
+					$row = $result->fetch_assoc();
+					$categoryMatrix[$i] = $row['name'];
 				}
-				else $_SESSION['categoryError']="Something gone wrong";
+			}
+			else $_SESSION['categoryError']="Something gone wrong";
+		}
+		else $_SESSION['categoryError']="Something gone wrong";
+		
+		//fill payment method
+		$sqlRequest="SELECT payment_methods_assigned_to_users.name
+		FROM payment_methods_assigned_to_users
+		WHERE payment_methods_assigned_to_users.user_id='$userId'";
+		if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+		{
+			if($result->num_rows)
+			{
+				$rowsPaymentCount=$result->num_rows;
+				for($i=0;$i<$rowsPaymentCount;$i++)
+				{
+					$row = $result->fetch_assoc();
+					$paymentMatrix[$i] = $row['name'];
+				}
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
 			
-			//fill payment method
-			$sqlRequest="SELECT payment_methods_assigned_to_users.name
-			FROM payment_methods_assigned_to_users
-			WHERE payment_methods_assigned_to_users.user_id='$userId'";
-			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
-			{
-				if($result->num_rows)
-				{
-					$rowsPaymentCount=$result->num_rows;
-					for($i=0;$i<$rowsPaymentCount;$i++)
-					{
-						$row = $result->fetch_assoc();
-						$paymentMatrix[$i] = $row['name'];
-					}
-				}
-				else $_SESSION['categoryError']="Something gone wrong";
-				$result->close();
-				$dataBaseConnect->close();
-			}
-			else $_SESSION['categoryError']="Something gone wrong";
 		}
+		else $_SESSION['categoryError']="Something gone wrong";
+		
+		//after submit
+		if( isset($_POST['expenseAmount']))
+		{
+			if($_POST['expenseAmount']>0)
+			{
+				$expenseItem=$_POST['expenseItem'];
+				$sqlRequest="SELECT expenses_category_assigned_to_users.id
+				FROM expenses_category_assigned_to_users
+				WHERE expenses_category_assigned_to_users.user_id='$userId' 
+				AND expenses_category_assigned_to_users.name='$expenseItem'";
+				if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
+				{
+					$row=$result->fetch_assoc();
+					$categoryId=$row['id'];
+					$expenseAmount=$_POST['expenseAmount'];
+					$expenseDate=$_POST['expenseDate'];
+					$expenseComment=$_POST['expenseComment'];
+					$sqlRequest="INSERT INTO expenses VALUES ( NULL, '$userId', '$categoryId', 1, '$expenseAmount', '$expenseDate', '$expenseComment' )";
+					mysqli_query($dataBaseConnect,$sqlRequest);
+					$_SESSION['showModal']=true;
+				}
+				else echo "WRONG !";
+			}
+			else
+			{
+				$_SESSION['amountError']="Please enter correct value!";
+			}
+		}
+		$result->close();
+		$dataBaseConnect->close();
 	}
 ?>
 
@@ -165,6 +163,13 @@
 						</div>
 						<div class="row pb-2">
 							<input type="number" class="textField" name="expenseAmount" placeholder="Expense amount (zł)" aria-label="Expensse">
+							<?php
+								if(isset($_SESSION['amountError']))
+								{
+									echo '<span class="errorStyle mb-0">'.$_SESSION['amountError'].'</span>';
+									unset($_SESSION['amountError']);
+								}
+							?>
 						</div>
 						<div class="row pb-1">
 							Date:
