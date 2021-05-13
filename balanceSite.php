@@ -21,6 +21,8 @@
 			WHERE incomes_category_assigned_to_users.user_id='$userId'";
 			if( $result=mysqli_query($dataBaseConnect,$sqlRequest))
 			{
+				$downBorder=$_POST['downBorder'];
+				$topBorder=$_POST['topBorder'];
 				if($result->num_rows)
 				{
 					$rowsIncomesCount=$result->num_rows;
@@ -29,6 +31,18 @@
 						$row = $result->fetch_assoc();
 						$incomesCategoryIdMatrix[$i] = $row['id'];
 						$incomesCategoryNameMatrix[$i] = $row['name'];
+						
+						$sqlRequest="SELECT SUM(incomes.amount)
+						AS summaryAmount
+						FROM incomes
+						WHERE incomes.user_id='$userId'
+						AND incomes.income_category_assigned_to_user_id ='$incomesCategoryIdMatrix[$i]'
+						AND incomes.date_of_income >= $downBorder
+						AND incomes.date_of_income <= $topBorder";
+						$sumResult=mysqli_query($dataBaseConnect,$sqlRequest);
+						$sumRow=$sumResult->fetch_assoc();
+						$incomesSummaryAmountMatrix[$i]=$sumRow['summaryAmount'];
+						if(!$incomesSummaryAmountMatrix[$i]>0) $incomesSummaryAmountMatrix[$i]=0;
 					}
 				}
 				else $_SESSION['balanceError']="Something gone wrong";
@@ -57,7 +71,6 @@
 			}
 			else $_SESSION['balanceError']="Something gone wrong";
 		}
-		
 	}
 ?>
 
@@ -92,16 +105,16 @@
 			switch(selectorValue)
 			{
 				case "Current month":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
+					//document.getElementById("topDateBorder").disabled = true;
+					//document.getElementById("downDateBorder").disabled = true;
 					setMaxDay( month );
 					if (month < 10) month = '0' + month;
 					downBorder= year+'-'+month+'-01';
 					topBorder= year+'-'+month+'-'+maxDay;
 					break;
 				case "Previous month":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
+					//document.getElementById("topDateBorder").disabled = true;
+					//document.getElementById("downDateBorder").disabled = true;
 					if( month != 1) month--;
 					else
 					{
@@ -114,14 +127,14 @@
 					topBorder= year+'-'+month+'-'+maxDay;
 					break;
 				case "Current year":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
+					//document.getElementById("topDateBorder").disabled = true;
+					//document.getElementById("downDateBorder").disabled = true;
 					downBorder=year + '-01-01';
 					topBorder=year + '-12-31';
 					break;
 				case "Custom":
-					document.getElementById("topDateBorder").disabled = false;
-					document.getElementById("downDateBorder").disabled = false;
+					//document.getElementById("topDateBorder").disabled = false;
+					//document.getElementById("downDateBorder").disabled = false;
 					break;
 			}
 			
@@ -229,7 +242,7 @@
 										{
 											echo "<tr> 
 													<td>".$incomesCategoryNameMatrix[$i]."</td>
-													<td>".$incomesCategoryIdMatrix[$i]."</td>
+													<td>".$incomesSummaryAmountMatrix[$i]."</td>
 												</tr>";
 										}
 										echo "</table>";
