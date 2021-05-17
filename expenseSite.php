@@ -122,7 +122,7 @@
 	<?php if (isset($_SESSION['showModal']) && $_SESSION['showModal']==true) { ?>
 		<script type='text/javascript'>
 			$(document).ready(function(){
-			$('#exampleModal').modal('show');
+			$('#expenseModal').modal('show');
 			});
 		</script>
 	<?php } ?>
@@ -138,7 +138,7 @@
 	
 	<div class="container bg-container">
 		<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id="expenseModal" tabindex="-1" role="dialog" aria-labelledby="expenseModalLabel" aria-hidden="true">
 			  <div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content modalStyle">
 				  <div class="modalStyle">

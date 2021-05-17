@@ -35,11 +35,9 @@
 					}
 				}
 				else $_SESSION['categoryError']="Something gone wrong";
-				;
 			}
 			else $_SESSION['categoryError']="Something gone wrong";
 		}
-		
 		//after submit
 		if( isset($_POST['incomeAmount']) )
 		{
@@ -61,7 +59,7 @@
 					mysqli_query($dataBaseConnect,$sqlRequest);
 					$_SESSION['showModal']=true;
 				}
-				else echo "WRONG !";
+				else echo "Something gone wrong !";
 			}
 			else
 			{
@@ -107,7 +105,7 @@
 	<?php if (isset($_SESSION['showModal']) && $_SESSION['showModal']) { ?>
 		<script type='text/javascript'>
 			$(document).ready(function(){
-			$('#exampleModal').modal('show');
+			$('#incomeModal').modal('show');
 			});
 		</script>
 	<?php } ?>
@@ -120,7 +118,7 @@
 	</header>
 	<div class="container bg-container">
 		<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id="incomeModal" tabindex="-1" role="dialog" aria-labelledby="incomeModalLabel" aria-hidden="true">
 			  <div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content modalStyle">
 				  <div class="modalStyle">
@@ -193,7 +191,7 @@
 						</a>
 					</div>
 					<div class="col-sm ">
-						<input class="btn buttonsStyle" type="submit" value="Submit" data-toggle="modal" data-target="#exampleModal"/>
+						<input class="btn buttonsStyle" type="submit" value="Submit" data-toggle="modal" data-target="#incomeModal"/>
 					</div>
 				</div>
 			</form>
