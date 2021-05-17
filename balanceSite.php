@@ -35,9 +35,9 @@
 						AS summaryAmount
 						FROM incomes
 						WHERE incomes.user_id='$userId'
-						AND incomes.income_category_assigned_to_user_id ='$incomesCategoryIdMatrix[$i]'";
-						//AND incomes.date_of_income >= $downBorder
-						//AND incomes.date_of_income <= $topBorder";
+						AND incomes.income_category_assigned_to_user_id ='$incomesCategoryIdMatrix[$i]'
+						AND incomes.date_of_income BETWEEN '$downBorder'
+						AND '$topBorder'";
 						if($sumResult=mysqli_query($dataBaseConnect,$sqlRequest))
 						{
 							$sumRow=$sumResult->fetch_assoc();
@@ -73,9 +73,9 @@
 						AS summaryAmount
 						FROM expenses
 						WHERE expenses.user_id='$userId'
-						AND expenses.expense_category_assigned_to_user_id ='$expensesCategoryIdMatrix[$i]'";
-						//AND expenses.date_of_income >= $downBorder
-						//AND expenses.date_of_income <= $topBorder";
+						AND expenses.expense_category_assigned_to_user_id ='$expensesCategoryIdMatrix[$i]'
+						AND expenses.date_of_expense BETWEEN '$downBorder'
+						AND '$topBorder'";
 						if($sumResult=mysqli_query($dataBaseConnect,$sqlRequest))
 						{
 							$sumRow=$sumResult->fetch_assoc();
