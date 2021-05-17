@@ -5,7 +5,6 @@
 		header('Location: index.php');
 		exit();
 	}
-	
 	else
 	{
 		if(isset($_POST['timeSelector']))
@@ -36,13 +35,19 @@
 						AS summaryAmount
 						FROM incomes
 						WHERE incomes.user_id='$userId'
-						AND incomes.income_category_assigned_to_user_id ='$incomesCategoryIdMatrix[$i]'
-						AND incomes.date_of_income >= $downBorder
-						AND incomes.date_of_income <= $topBorder";
-						$sumResult=mysqli_query($dataBaseConnect,$sqlRequest);
-						$sumRow=$sumResult->fetch_assoc();
-						$incomesSummaryAmountMatrix[$i]=$sumRow['summaryAmount'];
-						if(!$incomesSummaryAmountMatrix[$i]>0) $incomesSummaryAmountMatrix[$i]=0;
+						AND incomes.income_category_assigned_to_user_id ='$incomesCategoryIdMatrix[$i]'";
+						//AND incomes.date_of_income >= $downBorder
+						//AND incomes.date_of_income <= $topBorder";
+						if($sumResult=mysqli_query($dataBaseConnect,$sqlRequest))
+						{
+							$sumRow=$sumResult->fetch_assoc();
+							$incomesSummaryAmountMatrix[$i]=$sumRow['summaryAmount'];
+							if(!$incomesSummaryAmountMatrix[$i]>0) $incomesSummaryAmountMatrix[$i]=0;
+						}
+						else
+						{
+							$incomesSummaryAmountMatrix[$i]=0;
+						}
 					}
 				}
 				else $_SESSION['balanceError']="Something gone wrong";
@@ -64,8 +69,27 @@
 						$row = $result->fetch_assoc();
 						$expensesCategoryIdMatrix[$i] = $row['id'];
 						$expensesCategoryNameMatrix[$i] = $row['name'];
+						$sqlRequest="SELECT SUM(expenses.amount)
+						AS summaryAmount
+						FROM expenses
+						WHERE expenses.user_id='$userId'
+						AND expenses.expense_category_assigned_to_user_id ='$expensesCategoryIdMatrix[$i]'";
+						//AND expenses.date_of_income >= $downBorder
+						//AND expenses.date_of_income <= $topBorder";
+						if($sumResult=mysqli_query($dataBaseConnect,$sqlRequest))
+						{
+							$sumRow=$sumResult->fetch_assoc();
+							$expensesSummaryAmountMatrix[$i]=$sumRow['summaryAmount'];
+							if(!$expensesSummaryAmountMatrix[$i]>0) $expensesSummaryAmountMatrix[$i]=0;
+						}
+						else
+						{
+							$expensesSummaryAmountMatrix[$i]=0;
+						}
 					}
 					$showTable=true;
+					$result->close();
+					$dataBaseConnect->close();
 				}
 				else $_SESSION['balanceError']="Something gone wrong";
 			}
@@ -275,7 +299,7 @@
 								{
 									echo "<tr> 
 											<td>".$expensesCategoryNameMatrix[$i]."</td>
-											<td>".$expensesCategoryIdMatrix[$i]."</td>
+											<td>".$expensesSummaryAmountMatrix[$i]."</td>
 										</tr>";
 								}
 								echo "</table>";
