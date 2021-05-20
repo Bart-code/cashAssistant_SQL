@@ -6,6 +6,7 @@
 		exit();
 	}
 	unset($_SESSION['showModal']);
+	unset($_SESSION['balanceError']);
 ?>
 <html lang="pl">
 <head>
